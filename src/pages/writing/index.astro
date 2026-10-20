@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import Footer from '../../components/Footer.astro';
+import { site } from '../../data/site';
+import { getPosts, monthStamp } from '../../data/posts';
+
+const posts = await getPosts();
+---
+<Base title="Writing" description={`Everything ${site.name} has written about software, iOS and AI.`}>
+  <div class="mono"><a href="/">~/{site.handle}</a> / writing</div>
+  <header class="post-head">
+    <h1>Writing</h1>
+    <p>Notes on building software, iOS, and working alongside AI.</p>
+  </header>
+
+  <section class="box">
+    <div class="mono"><span>all posts</span><span>{posts.length}</span></div>
+    {posts.length === 0 && <p class="empty">First posts are on their way.</p>}
+    {posts.map((post) => (
+      <a class="row" href={`/writing/${post.id}/`}>
+        <span class="t">{post.data.title}{post.data.draft && <span class="draft"> (draft)</span>}<small>{post.data.description}</small></span>
+        <span class="d">{monthStamp(post.data.date)}</span>
+      </a>
+    ))}
+  </section>
+
+  <Footer />
+</Base>

@@ -1,0 +1,13 @@
+---
+import { site } from '../data/site';
+---
+<div class="links">
+  <a href={`mailto:${site.email}`}>Email</a>
+  <a href={site.github} rel="me">GitHub</a>
+  <a href={site.linkedin} rel="me">LinkedIn</a>
+  <a href="/rss.xml">RSS</a>
+</div>
+<footer class="foot mono">
+  <span>© {new Date().getFullYear()} {site.name}</span>
+  <span>no tracking · no cookies</span>
+</footer>

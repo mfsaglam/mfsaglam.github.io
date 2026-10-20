@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title="Not found">
+  <div class="mono"><a href="/">~/{site.handle}</a> / 404</div>
+  <header class="post-head">
+    <h1>Nothing here.</h1>
+    <p>That page doesn't exist, or it moved. <a href="/">Go home</a> or see <a href="/writing/">all writing</a>.</p>
+  </header>
+</Base>

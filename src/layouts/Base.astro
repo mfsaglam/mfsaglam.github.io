@@ -1,0 +1,79 @@
+---
+import '../styles/global.css';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  type?: 'website' | 'article';
+  published?: Date;
+  updated?: Date;
+  wide?: boolean;
+}
+
+const { title, description = site.description, type = 'website', published, updated, wide = false } = Astro.props;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL('/og.jpg', Astro.site);
+
+const person = {
+  '@type': 'Person',
+  '@id': new URL('/#person', Astro.site).href,
+  name: site.name,
+  alternateName: 'Fatih Saglam',
+  jobTitle: 'Senior iOS Engineer',
+  image: new URL('/me.webp', Astro.site).href,
+  url: Astro.site!.href,
+  sameAs: [site.github, site.linkedin],
+  address: { '@type': 'PostalAddress', addressLocality: 'Bursa', addressCountry: 'TR' },
+  knowsAbout: ['iOS', 'Swift', 'SwiftUI', 'Mobile architecture', 'AI'],
+};
+const jsonLd =
+  type === 'article'
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: title,
+        description,
+        datePublished: published?.toISOString(),
+        dateModified: (updated ?? published)?.toISOString(),
+        mainEntityOfPage: canonical.href,
+        author: person,
+      }
+    : { '@context': 'https://schema.org', ...person };
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{pageTitle}</title>
+  <meta name="description" content={description}>
+  <meta name="author" content={site.name}>
+  <link rel="canonical" href={canonical}>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="alternate" type="application/rss+xml" title={`${site.name} · Writing`} href="/rss.xml">
+  <link rel="sitemap" href="/sitemap-index.xml">
+  <meta name="theme-color" content="#0b0c0d">
+
+  <meta property="og:type" content={type}>
+  <meta property="og:title" content={title ?? site.name}>
+  <meta property="og:description" content={description}>
+  <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={ogImage}>
+  <meta property="og:site_name" content={site.name}>
+  <meta name="twitter:card" content="summary_large_image">
+  {published && <meta property="article:published_time" content={published.toISOString()}>}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</head>
+<body>
+  <main class:list={['panel', { wide }]}>
+    <slot />
+  </main>
+</body>
+</html>

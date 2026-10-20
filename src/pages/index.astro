@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
+import { site, projects } from '../data/site';
+import { getPosts, monthStamp } from '../data/posts';
+
+const posts = await getPosts();
+const latest = posts.slice(0, 6);
+---
+<Base>
+  <div class="mono">~/{site.handle}</div>
+  <header class="me">
+    <img class="photo" src="/me.webp" alt={site.name} width="60" height="60">
+    <div>
+      <h1>{site.name}</h1>
+      <p>{site.role} · {site.location}</p>
+    </div>
+  </header>
+
+  <div class="intro">
+    <p>I've been building iOS apps for six years: health and wearables at Huawei, and now EV charging for EnBW mobility+. More and more I also write <em>about</em> software: how it's built, why it breaks, and what AI is doing to the job.</p>
+    <p>This is where I keep those notes, and the small apps I make on the side.</p>
+  </div>
+
+  <section class="box" aria-labelledby="writing">
+    <div class="mono"><span id="writing">writing</span>{posts.length > latest.length && <a href="/writing/">all →</a>}</div>
+    {latest.length === 0 && <p class="empty">First posts are on their way.</p>}
+    {latest.map((post) => (
+      <a class="row" href={`/writing/${post.id}/`}>
+        <span class="t">{post.data.title}{post.data.draft && <span class="draft"> (draft)</span>}</span>
+        <span class="d">{monthStamp(post.data.date)}</span>
+      </a>
+    ))}
+  </section>
+
+  <section class="box" aria-labelledby="made">
+    <div class="mono"><span id="made">things i've made</span></div>
+    {projects.map((p) => (
+      <a class="row" href={p.url}>
+        <span class="t">{p.name}<small>{p.note}</small></span>
+        <span class="d">{p.tag}</span>
+      </a>
+    ))}
+  </section>
+
+  <section class="box" aria-labelledby="now">
+    <div class="mono"><span id="now">now</span><span>{site.now.updated}</span></div>
+    <p class="now">{site.now.text}</p>
+  </section>
+
+  <Footer />
+</Base>
