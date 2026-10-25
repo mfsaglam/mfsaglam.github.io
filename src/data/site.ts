@@ -2,9 +2,9 @@ export const site = {
   name: 'Fatih Sağlam',
   handle: 'fatih-saglam',
   role: 'Senior iOS engineer',
-  location: 'Bursa, Türkiye',
+  location: 'Munich, Germany',
   description:
-    'Fatih Sağlam is a senior iOS engineer in Bursa, Türkiye, who writes about building software, iOS and AI.',
+    'Fatih Sağlam is a senior iOS engineer in Munich, Germany, who writes about building software, iOS and AI.',
   email: 'mfsaglam1@icloud.com',
   github: 'https://github.com/mfsaglam',
   linkedin: 'https://www.linkedin.com/in/mfsaglam',
