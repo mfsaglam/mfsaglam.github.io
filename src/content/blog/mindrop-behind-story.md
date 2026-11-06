@@ -88,7 +88,9 @@ I just wanted to make it easier to remember the small things.
 
 ## From My Phone to the App Store
 
-The app is now on its way to the App Store.
+That little app is now available on the App Store as **MindDrop**.
+
+You can find it here: [MindDrop – Spotlight Lookup on the App Store](https://apps.apple.com/tr/app/mindrop-spotlight-lookup/id6830335852).
 
 It's still a small application, and that's intentional.
 
@@ -99,5 +101,3 @@ Sometimes, a tiny inconvenience in your everyday life is enough of a reason to b
 And sometimes, the best way to find out whether an idea is useful is simply to live with it for a while.
 
 That's how this one started.
-
-*I'll update this post with the App Store link once the app is available.*
