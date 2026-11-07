@@ -16,6 +16,7 @@ export const site = {
 };
 
 export const projects = [
+  { name: 'MindDrop', note: 'Save little things and find them instantly with Spotlight', tag: 'ios', url: 'https://apps.apple.com/tr/app/mindrop-spotlight-lookup/id6830335852' },
   { name: 'QuietCal', note: 'A minimalist calorie tracker. SwiftUI, SwiftData', tag: 'ios', url: 'https://github.com/mfsaglam/quietCal' },
   { name: 'WordLern', note: 'The 1,000 most common German words, with spaced repetition', tag: 'ios', url: 'https://github.com/mfsaglam/wordlern' },
   { name: 'Oqloq', note: 'A 24-hour clock for time-blocking your day', tag: 'ios', url: 'https://github.com/mfsaglam/oqloq2' },
