@@ -88,9 +88,9 @@ I just wanted to make it easier to remember the small things.
 
 ## From My Phone to the App Store
 
-That little app is now available on the App Store as **MindDrop**.
+That little app is now available on the App Store as **Mindrop**.
 
-You can find MindDrop on [its website](https://mfsaglam.github.io/mindrop/), which also links to the App Store.
+You can find Mindrop on [its website](https://mfsaglam.github.io/mindrop/), which also links to the App Store.
 
 It's still a small application, and that's intentional.
 
