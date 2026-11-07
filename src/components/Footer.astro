@@ -9,5 +9,8 @@ import { site } from '../data/site';
 </div>
 <footer class="foot mono">
   <span>© {new Date().getFullYear()} {site.name}</span>
-  <span>no tracking · no cookies</span>
+  <span>optional analytics · <button id="analytics-preferences" type="button">privacy preferences</button></span>
 </footer>
+<style>
+  #analytics-preferences { color: inherit; font: inherit; background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+</style>

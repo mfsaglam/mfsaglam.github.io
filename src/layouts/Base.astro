@@ -13,6 +13,8 @@ interface Props {
 
 const { title, description = site.description, type = 'website', published, updated, wide = false } = Astro.props;
 const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.role}`;
+const measurementId = import.meta.env.PUBLIC_GA4_ID ?? '';
+const hasValidMeasurementId = /^G-[A-Z0-9]+$/.test(measurementId);
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL('/og.jpg', Astro.site);
 
@@ -70,6 +72,103 @@ const jsonLd =
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  {hasValidMeasurementId && (
+    <script
+      is:inline
+      data-ga4-id={measurementId}
+      data-page-title={pageTitle}
+      data-page-path={Astro.url.pathname}
+      data-article={type === 'article' ? 'true' : 'false'}
+    >
+      {`(() => {
+        const script = document.currentScript;
+        const id = script.dataset.ga4Id;
+        const consentKey = 'analytics-consent';
+        let initialized = false;
+
+        function initializeAnalytics() {
+          if (initialized || localStorage.getItem(consentKey) !== 'granted') return;
+          initialized = true;
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = function () { window.dataLayer.push(arguments); };
+          window.gtag('js', new Date());
+          window.gtag('config', id);
+          const ga = document.createElement('script');
+          ga.async = true;
+          ga.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+          document.head.appendChild(ga);
+
+          if (script.dataset.article === 'true') {
+            const article = document.querySelector('article.prose');
+            if (!article) return;
+            const sent = new Set();
+            const thresholds = [25, 50, 75, 90];
+            function reportProgress() {
+              const rect = article.getBoundingClientRect();
+              const pageTop = window.scrollY + rect.top;
+              const articleHeight = article.offsetHeight;
+              const readable = Math.max(1, articleHeight - window.innerHeight);
+              const progress = Math.max(0, Math.min(100, Math.round(((window.scrollY - pageTop) / readable) * 100)));
+              for (const threshold of thresholds) {
+                if (progress >= threshold && !sent.has(threshold)) {
+                  sent.add(threshold);
+                  window.gtag('event', 'article_read_progress', {
+                    article_path: script.dataset.pagePath,
+                    article_title: script.dataset.pageTitle,
+                    progress_percent: threshold
+                  });
+                }
+              }
+            }
+            window.addEventListener('scroll', reportProgress, { passive: true });
+            window.addEventListener('resize', reportProgress, { passive: true });
+            window.__ga4ProgressCleanup = () => {
+              window.removeEventListener('scroll', reportProgress);
+              window.removeEventListener('resize', reportProgress);
+            };
+          }
+        }
+
+        function saveConsent(granted) {
+          localStorage.setItem(consentKey, granted ? 'granted' : 'denied');
+          document.getElementById('analytics-consent')?.remove();
+          if (granted) {
+            initializeAnalytics();
+          } else if (initialized) {
+            window.__ga4ProgressCleanup?.();
+            window.gtag('consent', 'update', { analytics_storage: 'denied' });
+          }
+        }
+
+        function showConsent() {
+          document.getElementById('analytics-consent')?.remove();
+          const banner = document.createElement('aside');
+          banner.id = 'analytics-consent';
+          banner.setAttribute('role', 'region');
+          banner.setAttribute('aria-label', 'Analytics consent');
+          banner.innerHTML = '<p>This site uses Google Analytics to understand visits and article reading. Analytics is optional and stays off unless you agree.</p><div><button type="button" data-consent="granted">Allow analytics</button><button type="button" data-consent="denied">Reject</button></div>';
+          Object.assign(banner.style, { position: 'fixed', zIndex: '10', left: '16px', right: '16px', bottom: '16px', maxWidth: '720px', margin: 'auto', padding: '16px', display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', color: '#e8e9ea', background: '#17191beF', border: '1px solid #ffffff2a', borderRadius: '14px', font: '14px/1.5 system-ui, sans-serif', boxShadow: '0 8px 32px #0008' });
+          const buttons = banner.querySelector('div');
+          Object.assign(buttons.style, { display: 'flex', gap: '8px' });
+          banner.querySelectorAll('button').forEach((button) => Object.assign(button.style, { padding: '8px 12px', color: '#e8e9ea', background: '#303438', border: '1px solid #ffffff30', borderRadius: '8px', cursor: 'pointer' }));
+          banner.addEventListener('click', (event) => {
+            const choice = event.target.closest('button')?.dataset.consent;
+            if (choice) saveConsent(choice === 'granted');
+          });
+          document.body.appendChild(banner);
+        }
+
+        function start() {
+          document.getElementById('analytics-preferences')?.addEventListener('click', showConsent);
+          if (localStorage.getItem(consentKey) === 'granted') initializeAnalytics();
+          else if (!localStorage.getItem(consentKey)) showConsent();
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
+        else start();
+      })();`}
+    </script>
+  )}
 </head>
 <body>
   <main class:list={['panel', { wide }]}>
