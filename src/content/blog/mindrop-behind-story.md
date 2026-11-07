@@ -90,7 +90,7 @@ I just wanted to make it easier to remember the small things.
 
 That little app is now available on the App Store as **MindDrop**.
 
-You can find it here: [MindDrop – Spotlight Lookup on the App Store](https://apps.apple.com/tr/app/mindrop-spotlight-lookup/id6830335852).
+You can find MindDrop on [its website](https://mfsaglam.github.io/mindrop/), which also links to the App Store.
 
 It's still a small application, and that's intentional.
 
